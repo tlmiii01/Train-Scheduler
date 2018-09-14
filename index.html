@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Train Scheduler</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="./assets/css/style.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+    <!-- Firebase  -->
+    <script src="https://www.gstatic.com/firebasejs/5.4.2/firebase.js"></script>
+
+    <script src="./assets/javascript/app.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="jumbotron">
+            Train Scheduler
+        </div>
+
+        <div class="row">
+            <div class="card w-100">
+                <div class="card-header bg-primary text-white">
+                    <h5>Current Train Schedule</h5>
+                </div>
+                <div class="card-body">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Train Name</th>
+                                <th>Destination</th>
+                                <th>Frequency (min)</th>
+                                <th>Next Arrival</th>
+                                <th>Minutes Away</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="card w-100">
+                <div class="card-header">
+                    <h5>Add a train</h5>
+                </div>
+                <div class="card-body">
+                    <form action="">
+                        <div class="form-group">
+                            <label for="train-name-input">Train Name</label>
+                            <input type="text" class="form-control" id="train-name-input" 
+                                placeholder="Enter a train name">
+                        </div>
+                        <div class="form-group">
+                            <label for="destination-input">Destination</label>
+                            <input type="text" class="form-control" id="destination-input" 
+                                placeholder="Destination">
+                        </div>
+                        <div class="form-group">
+                            <label for="first-arrival-input">First Arrival Time (HH:MM) - 24 hr. time</label>
+                            <input type="text" class="form-control" id="first-arrival-input" 
+                                pattern="[0-9]{2}:[0-9]{2}" placeholder="Destination">
+                        </div>
+                        <div class="form-group">
+                            <label for="frequency-input">Frequency (min)</label>
+                            <input type="text" class="form-control" id="fequency-input" 
+                                pattern="\d*" placeholder="Destination">
+                        </div>
+                       
+                        <button type="submit" class="btn btn-primary" id="trainS">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
