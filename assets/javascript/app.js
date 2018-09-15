@@ -5,23 +5,27 @@ var config = {
     projectId: "this-is-a-thomas-project",
     storageBucket: "this-is-a-thomas-project.appspot.com",
     messagingSenderId: "811715918066"
-  };
+};
 
-  firebase.initializeApp(config);
+firebase.initializeApp(config);
 
-  var database = firebase.database();
-  var trainRef = database.ref("/trains/");
-  var trainName = "";
-  var destination = "";
-  var startTime = "";
-  var frequency = "";
-  var nextArrivalTime = "";
-  var timeToNextArrival = 0;
+var database = firebase.database();
+var trainRef = database.ref("/trains/");
+
+var trainName = "";
+var destination = "";
+var startTime = "";
+var frequency = "";
+var nextArrivalTime = "";
+var timeToNextArrival = 0;
+
+// Testing 
+var numberOfTrains = 0;
 
 function calculateTrainTime() {
     var firstTime = startTime;
     var trainFrequency = frequency;
-    
+
     var convertedFirsttime = moment(firstTime, "HH:mm").subtract("1", "years")
     var currentTime = moment().format("HH:mm");
 
@@ -37,11 +41,42 @@ function calculateTrainTime() {
     // console.log("Next train arrives at " + moment(nextArrival).format("HH:mm A"));
 }
 
+function updateDisplay(snapshot) {
 
-  $(document).ready( () => {
     
-    // calculateTrainTime();
+    // Grab data and stash in global variables
+    trainName = snapshot.val().name;
+    destination = snapshot.val().destination;
+    frequency = snapshot.val().frequency;
+    startTime = snapshot.val().startTime;
     
+    calculateTrainTime();
+    
+    // Create a new table row and add contents
+    var newRow = $("<tr>");
+    newRow.append("<td>" + snapshot.val().name + "</td>");
+    newRow.append("<td>" + snapshot.val().destination + "</td>");
+    newRow.append("<td>" + snapshot.val().frequency + "</td>");
+    newRow.append("<td>" + nextArrivalTime + "</td>");
+    newRow.append("<td>" + timeToNextArrival + "</td>");
+    
+    $("tbody").append(newRow);
+}
+
+
+$(document).ready(() => {
+    
+    // Get this to run every minute
+    var intervalID = setInterval(() => {
+        trainRef.on("value", (snapshot) => {
+            // Empty the table first, then update the display
+            $("tbody").empty();
+            snapshot.forEach(updateDisplay);
+        });
+        
+        
+    }, 60000);
+
     // Add new information to the database
     $("#trainSubmit").on("click", (event) => {
         event.preventDefault();
@@ -66,25 +101,6 @@ function calculateTrainTime() {
     });
 
     // Add data from the databade to the screen.
-    trainRef.on("child_added", (snapshot) => {
-        console.log(snapshot);
-
-        // Grab data and stash in global variables
-        trainName = snapshot.val().name;
-        destination = snapshot.val().destination;
-        frequency = snapshot.val().frequency;
-        startTime = snapshot.val().startTime;
-        
-        calculateTrainTime();
-
-        // Create a new table row and add contents
-        var newRow = $("<tr>");
-        newRow.append("<td>" + snapshot.val().name + "</td>");
-        newRow.append("<td>" + snapshot.val().destination + "</td>");
-        newRow.append("<td>" + snapshot.val().frequency + "</td>");
-        newRow.append("<td>" + nextArrivalTime + "</td>");
-        newRow.append("<td>" + timeToNextArrival +"</td>");
-
-        $("tbody").append(newRow);
-    });
-  })
+    trainRef.on("child_added", updateDisplay );
+      
+})
